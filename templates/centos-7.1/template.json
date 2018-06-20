@@ -1,0 +1,37 @@
+{
+    "variables": {
+        "ssh_name": "srussel0",
+        "ssh_pass": "pumpkinbreadisgood1234",
+        "hostname": "packer-test"
+    },
+
+    "builders": [{
+        "type": "virtualbox-iso",
+        "guest_os_type": "RedHat_64",
+
+        "vboxmanage": [
+            ["modifyvm", "{{.Name}}", "--cpus", "1"],
+            ["modifyvm", "{{.Name}}", "--memory", "1024"]
+        ],
+
+        "disk_size" : 10000,
+
+        "iso_url": "file:///C:/Users/srussel0/Downloads/CentOS-7-x86_64-DVD-1804.iso",
+        "iso_checksum": "3a7cb1f2041fee7c3c99c2afc7f1bf60ac671c73",
+        "iso_checksum_type": "sha1",
+
+        "http_directory" : "http_directory",
+        "http_port_min" : 9001,
+        "http_port_max" : 9001,
+
+        "ssh_username": "{{user `ssh_name`}}",
+        "ssh_password": "{{user `ssh_pass`}}",
+        "ssh_wait_timeout": "20m",
+
+        "shutdown_command": "echo {{user `ssh_pass`}} | sudo -S shutdown -P now",
+
+        "boot_command" : [
+            "<tab> text ks=http/ks.cfg<enter><wait>"
+        ]
+    }]
+}
